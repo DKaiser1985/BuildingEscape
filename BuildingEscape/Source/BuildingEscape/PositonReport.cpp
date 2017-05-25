@@ -19,8 +19,11 @@ UPositonReport::UPositonReport()
 void UPositonReport::BeginPlay()
 {
 	Super::BeginPlay();
+	 
+	FString ObjectName = GetOwner()->GetName();
+	FString ObjectPos = GetOwner()->GetActorTransform().GetLocation().ToString();
+	UE_LOG(LogTemp, Warning, TEXT("%s is %s "), *ObjectName, *ObjectPos);
 
-	// ...
 	
 }
 
