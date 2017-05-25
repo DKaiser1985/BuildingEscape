@@ -20,7 +20,6 @@ protected:
 	virtual void BeginPlay() override;
 
 	void OpenDoor();
-
 	void CloseDoor();
 
 public:	
@@ -28,13 +27,15 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 private:
+		AActor* Owner;
 	UPROPERTY(VisibleAnywhere)
-	float OpenAngle = 90.0f;
-private:
+		float OpenAngle = 0.0f;
 	UPROPERTY(EditAnywhere)
 		ATriggerVolume* PressurePlate;
 	UPROPERTY(EditAnywhere)
 		AActor* ActorThatOpens; //Remember Pawn Inherits form Actor
-
-	
+	UPROPERTY(EditAnywhere)
+		float DoorCloseDelay = 1.0f;
+	UPROPERTY(VisibleAnywhere)
+		float LastDoorOpenTime;
 };
