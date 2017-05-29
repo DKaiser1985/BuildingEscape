@@ -53,17 +53,21 @@ void UGrabber::SetupInputComponent(){
 }
 
 
-
-
 // Called every frame
 void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	//if the Physics Handle is attached
-		//Move object we're holding
+	if (PhysicsHandle->GrabbedComponent) {
+		//Move Object we're holding
+		PhysicsHandle->SetTargetLocation(EndOfReach());
+	}
+		
 
 }
+
+//Return Hit for first Physics Body in Reach
 const FHitResult UGrabber::GetFirstPhysicsBodyInReach(){
 
 	///get the player Viewpoint
@@ -97,18 +101,44 @@ const FHitResult UGrabber::GetFirstPhysicsBodyInReach(){
 	}
 	return Hit;
 }
+
+FVector UGrabber::EndOfReach() {
+	///get the player Viewpoint
+	FVector  PlayerViewPointLocation;
+	FRotator PlayerViewPointRotation;
+	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(
+		OUT PlayerViewPointLocation,
+		OUT PlayerViewPointRotation
+
+	);
+
+	///Draw Debug Line to visualize grabber
+	OUT FHitResult Hit;
+	FVector LineTraceEnd = PlayerViewPointLocation + PlayerViewPointRotation.Vector() * Reach;
+	return (LineTraceEnd);
+}
+
+//Pickup the first The PhysicsBody in reach
 void UGrabber::Grab() {
 	UE_LOG(LogTemp, Warning, TEXT("Grab Pressed"));
 
 	///LineTrace and Try and reach any actors with PhysicsBody collision channel set
-	GetFirstPhysicsBodyInReach();
-	//TODO Attach Physics Handle
-
+	
+	auto HitResult = GetFirstPhysicsBodyInReach();
+	auto ComponentToGrab = HitResult.GetComponent();
+	auto ActorHit = HitResult.GetActor();
+	FRotator Rotator = FRotator();
+	//Attach Physics Handle
+	if (ActorHit) {
+		PhysicsHandle->GrabComponentAtLocationWithRotation(ComponentToGrab, NAME_None, ComponentToGrab->GetOwner()->GetActorLocation(), Rotator);
+	}
 }
-void UGrabber::Release() {
-	UE_LOG(LogTemp, Warning, TEXT("Grab Released"));
 
+//Release Grabbed Physics Body
+void UGrabber::Release() {
 	//TODO Released Physics Handle
+	PhysicsHandle->ReleaseComponent();
+	UE_LOG(LogTemp, Warning, TEXT("Grab Released"));
 }
 
 
