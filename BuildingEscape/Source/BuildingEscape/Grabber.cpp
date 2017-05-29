@@ -22,8 +22,27 @@ void UGrabber::BeginPlay()
 {
 	Super::BeginPlay();
 
+	///Look for attched Physics Handle created at runtime
+	PhysicsHandle = GetOwner()->FindComponentByClass<UPhysicsHandleComponent>();
+	if (PhysicsHandle) {
+
+	}
+	else {
+		UE_LOG(LogTemp, Error, TEXT("No PhysicsHandler Found on %s."), *GetOwner()->GetName());
+	}
+
+	///Find the InputComponent created at runtime
+	InputComponent = GetOwner()->FindComponentByClass<UInputComponent>();
+	if (InputComponent) {
+		UE_LOG(LogTemp, Warning, TEXT("InputComponent found on %s."), *GetOwner()->GetName());
+		
+		///Bind the Input Action
+		InputComponent->BindAction("Grab", IE_Pressed, this, &UGrabber::Grab);
+	}
+
 	UE_LOG(LogTemp, Warning, TEXT("Grabber Reporting For Duty"));
 	
+
 }
 
 
@@ -64,5 +83,8 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 		UE_LOG(LogTemp, Warning, TEXT("Hit Object: %s"), *Hit.GetActor()->GetName());
 	}
 	///Log it out with roll
+}
+void UGrabber::Grab() {
+	UE_LOG(LogTemp, Warning, TEXT("Grab Pressed"));
 }
 

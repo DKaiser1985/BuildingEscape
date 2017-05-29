@@ -26,7 +26,11 @@ private:
 	//Arms Reach in cm
 	float Reach = 100.0f;
 
-
+	UPhysicsHandleComponent* PhysicsHandle = nullptr;
+	UInputComponent* InputComponent = nullptr;
+	 
+	//Raycast and Grab whats in reach
+	void Grab();
 
 		
 	
