@@ -42,7 +42,11 @@ private:
 	//Return Hit for first Physics Body in Reach
 	const FHitResult GetFirstPhysicsBodyInReach();
 
-	FVector EndOfReach();
+	//Returns the End of Reach
+	FVector GetStartOfReach();
+
+	//Returns the End of Reach
+	FVector GetEndOfReach();
 		
 	
 };
