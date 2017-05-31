@@ -14,3 +14,5 @@ BuildingEscape/Content/StarterContent/
 *VC.db
 *.ipch
 BuildingEscape/.vs/BuildingEscape/v15/Browse.VC.opendb
+*.sln
+*.VC.db*

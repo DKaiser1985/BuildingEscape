@@ -127,10 +127,16 @@ void UGrabber::Grab() {
 	auto HitResult = GetFirstPhysicsBodyInReach();
 	auto ComponentToGrab = HitResult.GetComponent();
 	auto ActorHit = HitResult.GetActor();
+	
+	//Create blank Rotator so object doesn't rotate
 	FRotator Rotator = FRotator();
+	
 	//Attach Physics Handle
 	if (ActorHit) {
-		PhysicsHandle->GrabComponentAtLocationWithRotation(ComponentToGrab, NAME_None, ComponentToGrab->GetOwner()->GetActorLocation(), Rotator);
+		PhysicsHandle->GrabComponentAtLocationWithRotation(ComponentToGrab, 
+			NAME_None,
+			ComponentToGrab->GetOwner()->GetActorLocation(),
+			Rotator);
 	}
 }
 
