@@ -27,6 +27,8 @@ public:
 	AActor* Owner;
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+
+
 private:
 	//UPROPERTYs show things in the Details Inspector and Create Variables to be used on the object
 	UPROPERTY(EditAnywhere)
@@ -36,9 +38,8 @@ private:
 	UPROPERTY(EditAnywhere)
 		ATriggerVolume* PressurePlate;
 	UPROPERTY(EditAnywhere)
-		AActor* ActorThatOpens; //Remember Pawn Inherits form Actor
-	UPROPERTY(EditAnywhere)
 		float DoorCloseDelay = 1.0f;
 	UPROPERTY(VisibleAnywhere)
 		float DoorLastOpenTime;
+	float GetTotalMassOfActorsOnPlate();
 };
