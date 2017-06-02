@@ -46,7 +46,5 @@ private:
 	FVector GetStartOfReach();
 
 	//Returns the End of Reach
-	FVector GetEndOfReach();
-		
-	
+	FVector GetEndOfReach();	
 };
