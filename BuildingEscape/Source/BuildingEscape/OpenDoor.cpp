@@ -6,7 +6,6 @@
 
 #define OUT
 
-
 // Sets default values for this component's properties
 UOpenDoor::UOpenDoor()
 {
@@ -22,27 +21,13 @@ UOpenDoor::UOpenDoor()
 void UOpenDoor::BeginPlay()
 {
 	Super::BeginPlay();
-
-	//FindThe pawn that opens the door
-	//ActorThatOpens = GetWorld()->GetFirstPlayerController()->GetPawn();
+	
+	if (!PressurePlate) {
+		UE_LOG(LogTemp, Error, TEXT("%s misssing Pressure Plate"), *GetOwner()->GetName());
+	}
 
 	
 }
-
-void UOpenDoor::OpenDoor()
-{
-	//Set door rotation with Rotator built at runtime
-	//Find the owner actor
-	AActor* Owner = GetOwner();
-	Owner->SetActorRotation(FRotator(0.0f, OpenAngle, 0.0f));
-}
-
-void UOpenDoor::CloseDoor(){
-	//Set door rotation with Rotator built at runtime
-	AActor* Owner = GetOwner();
-	Owner->SetActorRotation(FRotator(0.0f, ClosedAngle, 0.0f));
-}
-
 
 // Called every frame
 void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -52,12 +37,11 @@ void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 	//Poll Trigger VOlume
 	//If Actor on Trigger Volume OPen Door
 	
-	if (GetTotalMassOfActorsOnPlate() >= 40.0f){ //TODO Make a Parameter//
-		OpenDoor();
-		DoorLastOpenTime = GetWorld()->GetTimeSeconds();
+	if (GetTotalMassOfActorsOnPlate() >= TriggerMass){ //TODO Make a Parameter//
+		OnOpen.Broadcast();
 	}
-	if((GetWorld()->GetTimeSeconds() - DoorLastOpenTime) > DoorCloseDelay){
-		CloseDoor();
+	else {
+		OnClose.Broadcast();
 	}
 
 }
@@ -68,6 +52,7 @@ float UOpenDoor::GetTotalMassOfActorsOnPlate()
 
 	//Get total mass of each actor and add them together
 	TArray <AActor*> OverlappingActors;
+	if (!PressurePlate) { return TotalMass; }
 	PressurePlate->GetOverlappingActors(OUT OverlappingActors);
 
 	for (auto* Actor : OverlappingActors) {
